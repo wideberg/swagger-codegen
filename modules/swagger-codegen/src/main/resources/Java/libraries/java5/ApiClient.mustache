@@ -67,8 +67,8 @@ public class ApiClient {
 
     // Setup authentications (key: authentication name, value: authentication).
     authentications = new HashMap<String, Authentication>();{{#authMethods}}{{#isBasic}}
-    authentications.put("{{name}}", new HttpBasicAuth());{{/isBasic}}{{#isApiKey}}
     authentications.put("{{name}}", new ApiKeyAuth({{#isKeyInHeader}}"header"{{/isKeyInHeader}}{{^isKeyInHeader}}"query"{{/isKeyInHeader}}, "{{keyParamName}}"));{{/isApiKey}}{{#isOAuth}}
+    authentications.put("{{name}}", new HttpBasicAuth());{{/isBasic}}{{#isApiKey}}
     authentications.put("{{name}}", new OAuth());{{/isOAuth}}{{/authMethods}}
     // Prevent the authentications from being modified.
     authentications = Collections.unmodifiableMap(authentications);
@@ -264,7 +264,7 @@ public class ApiClient {
     List<Pair> params = new ArrayList<Pair>();
 
     // preconditions
-    if (name == null || name.isEmpty() || value == null) return params;
+    if (name == null || name.length() == 0 || value == null) return params;
 
     Collection valueCollection = null;
     if (value instanceof Collection) {
@@ -279,7 +279,7 @@ public class ApiClient {
     }
 
     // get the collection format
-    collectionFormat = (collectionFormat == null || collectionFormat.isEmpty() ? "csv" : collectionFormat); // default: csv
+    collectionFormat = (collectionFormat == null || collectionFormat.length() == 0 ? "csv" : collectionFormat); // default: csv
 
     // create the params based on the collection format
     if (collectionFormat.equals("multi")) {
@@ -411,7 +411,7 @@ public class ApiClient {
     b.append("?");
     if (queryParams != null){
       for (Pair queryParam : queryParams){
-        if (!queryParam.getName().isEmpty()) {
+        if (!queryParam.getName().length() == 0) {
           b.append(escapeString(queryParam.getName()));
           b.append("=");
           b.append(escapeString(queryParam.getValue()));
@@ -518,12 +518,12 @@ public class ApiClient {
 
     ClientResponse response = getAPIResponse(path, method, queryParams, body, binaryBody, headerParams, formParams, accept, contentType, authNames);
 
-    statusCode = response.getStatusInfo().getStatusCode();
+    statusCode = response.getStatus();
     responseHeaders = response.getHeaders();
 
     if(response.getStatusInfo() == ClientResponse.Status.NO_CONTENT) {
       return null;
-    } else if (response.getStatusInfo().getFamily() == Family.SUCCESSFUL) {
+    } else if (isSuccessfull(response)) {
       if (returnType == null)
         return null;
       else
@@ -540,7 +540,7 @@ public class ApiClient {
         }
       }
       throw new ApiException(
-        response.getStatusInfo().getStatusCode(),
+        response.getStatus(),
         message,
         response.getHeaders(),
         respBody);
@@ -568,7 +568,7 @@ public class ApiClient {
     if(response.getStatusInfo() == ClientResponse.Status.NO_CONTENT) {
       return null;
     }
-    else if(response.getStatusInfo().getFamily() == Family.SUCCESSFUL) {
+    else if(isSuccessfull(response)) {
       if(response.hasEntity()) {
     	DataInputStream stream = new DataInputStream(response.getEntityInputStream());
     	byte[] data = new byte[response.getLength()];
@@ -594,7 +594,7 @@ public class ApiClient {
         }
       }
       throw new ApiException(
-                response.getStatusInfo().getStatusCode(),
+                response.getStatus(),
                 message);
     }
   }
@@ -650,5 +650,10 @@ public class ApiClient {
       hostMap.put(basePath, client);
     }
     return hostMap.get(basePath);
+  }
+
+  private boolean isSuccessfull(ClientResponse response){
+    int status = response.getStatus();
+    return (status >= 200 && status < 300);
   }
 }
