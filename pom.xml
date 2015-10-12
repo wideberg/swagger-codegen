@@ -354,6 +354,18 @@
             </modules>
         </profile>
         <profile>
+            <id>java-client-apache</id>
+            <activation>
+                <property>
+                    <name>env</name>
+                    <value>java</value>
+                </property>
+            </activation>
+            <modules>
+                <module>samples/client/petstore/java/apache</module>
+            </modules>
+        </profile>
+        <profile>
             <id>scala-client</id>
             <activation>
                 <property>

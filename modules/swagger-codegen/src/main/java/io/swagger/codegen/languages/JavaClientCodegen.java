@@ -86,6 +86,7 @@ public class JavaClientCodegen extends DefaultCodegen implements CodegenConfig {
         supportedLibraries.put("jersey2", "HTTP client: Jersey client 2.6");
         supportedLibraries.put("okhttp-gson", "HTTP client: OkHttp 2.4.0. JSON processing: Gson 2.3.1");
         supportedLibraries.put("retrofit", "HTTP client: OkHttp 2.4.0. JSON processing: Gson 2.3.1 (Retrofit 1.9.0)");
+        supportedLibraries.put("java5", "(compatible with Java 1.5) HTTP client: Jersey client 1.2. JSON processing: Jackson 2.1.5");
         cliOptions.add(buildLibraryCliOption(supportedLibraries));
     }
 
