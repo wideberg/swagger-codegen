@@ -43,6 +43,7 @@ import static io.swagger.codegen.plugin.AdditionalParams.API_PACKAGE_PARAM;
 import static io.swagger.codegen.plugin.AdditionalParams.INVOKER_PACKAGE_PARAM;
 import static io.swagger.codegen.plugin.AdditionalParams.MODEL_PACKAGE_PARAM;
 import static io.swagger.codegen.plugin.AdditionalParams.TEMPLATE_DIR_PARAM;
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 /**
  * Goal which generates client/server code from a swagger json/yaml definition.
@@ -154,6 +155,10 @@ public class CodeGenMojo extends AbstractMojo {
                     if (genConfig.hasOption(langCliOption.getOpt())) {
                         config.additionalProperties().put(langCliOption.getOpt(), genConfig.getOption(langCliOption.getOpt()));
                     }
+                }
+
+                if(genConfig.hasOption("library")){
+                    config.setLibrary(genConfig.getOption("library"));
                 }
             } else {
             	throw new RuntimeException("Unable to read configuration file");
