@@ -2,7 +2,9 @@ package io.swagger.codegen.languages;
 
 import io.swagger.codegen.CodegenConfig;
 import io.swagger.codegen.CodegenConstants;
+import io.swagger.codegen.CodegenModel;
 import io.swagger.codegen.CodegenOperation;
+import io.swagger.codegen.CodegenProperty;
 import io.swagger.codegen.CodegenType;
 import io.swagger.codegen.SupportingFile;
 import io.swagger.models.Operation;
@@ -22,10 +24,6 @@ import java.util.List;
 import java.util.Map;
 
 public class JavaInflectorServerCodegen extends JavaClientCodegen implements CodegenConfig {
-    protected String invokerPackage = "io.swagger.handler";
-    protected String groupId = "io.swagger";
-    protected String artifactId = "swagger-inflector-server";
-    protected String artifactVersion = "1.0.0";
     protected String title = "Swagger Inflector";
 
     public JavaInflectorServerCodegen() {
@@ -34,7 +32,9 @@ public class JavaInflectorServerCodegen extends JavaClientCodegen implements Cod
         sourceFolder = "src/main/java";
         modelTemplateFiles.put("model.mustache", ".java");
         apiTemplateFiles.put("api.mustache", ".java");
-        templateDir = "JavaInflector";
+        embeddedTemplateDir = templateDir = "JavaInflector";
+        invokerPackage = "io.swagger.handler";
+        artifactId = "swagger-inflector-server";
 
         apiPackage = System.getProperty("swagger.codegen.inflector.apipackage", "io.swagger.handler");
         modelPackage = System.getProperty("swagger.codegen.inflector.modelpackage", "io.swagger.model");
@@ -121,6 +121,22 @@ public class JavaInflectorServerCodegen extends JavaClientCodegen implements Cod
         }
         opList.add(co);
         co.baseName = basePath;
+    }
+
+    @Override
+    public Map<String, Object> postProcessModels(Map<String, Object> objs) {
+        List<Object> models = (List<Object>) objs.get("models");
+        for (Object _mo : models) {
+            Map<String, Object> mo = (Map<String, Object>) _mo;
+            CodegenModel cm = (CodegenModel) mo.get("model");
+            for (CodegenProperty var : cm.vars) {
+                // handle default value for enum, e.g. available => StatusEnum.available
+                if (var.isEnum && var.defaultValue != null && !"null".equals(var.defaultValue)) {
+                    var.defaultValue = var.datatypeWithEnum + "." + var.defaultValue;
+                }
+            }
+        }
+        return objs;
     }
 
     public Map<String, Object> postProcessOperations(Map<String, Object> objs) {

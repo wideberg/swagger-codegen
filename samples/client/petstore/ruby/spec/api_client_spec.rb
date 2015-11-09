@@ -102,4 +102,47 @@ describe Petstore::ApiClient do
     end
   end
 
+  describe "#object_to_hash" do
+    it "ignores nils and includes empty arrays" do
+      api_client = Petstore::ApiClient.new
+      pet = Petstore::Pet.new
+      pet.id = 1
+      pet.name = ''
+      pet.status = nil
+      pet.photo_urls = nil
+      pet.tags = []
+      expected = {id: 1, name: '', tags: []}
+      api_client.object_to_hash(pet).should == expected
+    end
+  end
+
+  describe "#build_collection_param" do
+    let(:param) { ['aa', 'bb', 'cc'] }
+    let(:api_client) { Petstore::ApiClient.new }
+
+    it "works for csv" do
+      api_client.build_collection_param(param, :csv).should == 'aa,bb,cc'
+    end
+
+    it "works for ssv" do
+      api_client.build_collection_param(param, :ssv).should == 'aa bb cc'
+    end
+
+    it "works for tsv" do
+      api_client.build_collection_param(param, :tsv).should == "aa\tbb\tcc"
+    end
+
+    it "works for pipes" do
+      api_client.build_collection_param(param, :pipes).should == 'aa|bb|cc'
+    end
+
+    it "works for multi" do
+      api_client.build_collection_param(param, :multi).should == ['aa', 'bb', 'cc']
+    end
+
+    it "fails for invalid collection format" do
+      proc { api_client.build_collection_param(param, :INVALID) }.should raise_error
+    end
+  end
+
 end

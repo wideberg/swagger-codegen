@@ -1,6 +1,7 @@
 package io.swagger.codegen.languages;
 
 import io.swagger.codegen.CodegenConfig;
+import io.swagger.codegen.CodegenConstants;
 import io.swagger.codegen.CodegenType;
 import io.swagger.codegen.DefaultCodegen;
 import io.swagger.codegen.SupportingFile;
@@ -27,7 +28,7 @@ public class CSharpClientCodegen extends DefaultCodegen implements CodegenConfig
         outputFolder = "generated-code" + File.separator + "csharp";
         modelTemplateFiles.put("model.mustache", ".cs");
         apiTemplateFiles.put("api.mustache", ".cs");
-        templateDir = "csharp";
+        embeddedTemplateDir = templateDir = "csharp";
         apiPackage = "IO.Swagger.Api";
         modelPackage = "IO.Swagger.Model";
 
@@ -79,38 +80,39 @@ public class CSharpClientCodegen extends DefaultCodegen implements CodegenConfig
         typeMapping.put("object", "Object");
 
         cliOptions.clear();
-        cliOptions.add(new CliOption("packageName", "C# package name (convention: Camel.Case), default: IO.Swagger"));
-        cliOptions.add(new CliOption("packageVersion", "C# package version, default: 1.0.0"));
-
+        cliOptions.add(new CliOption(CodegenConstants.PACKAGE_NAME, "C# package name (convention: Camel.Case).")
+                .defaultValue("IO.Swagger"));
+        cliOptions.add(new CliOption(CodegenConstants.PACKAGE_VERSION, "C# package version.").defaultValue("1.0.0"));
+        cliOptions.add(new CliOption(CodegenConstants.SORT_PARAMS_BY_REQUIRED_FLAG, CodegenConstants.SORT_PARAMS_BY_REQUIRED_FLAG_DESC));
     }
 
     @Override
     public void processOpts() {
         super.processOpts();
 
-        if (additionalProperties.containsKey("packageVersion")) {
-            packageVersion = (String) additionalProperties.get("packageVersion");
+        if (additionalProperties.containsKey(CodegenConstants.PACKAGE_VERSION)) {
+            setPackageVersion((String) additionalProperties.get(CodegenConstants.PACKAGE_VERSION));
         } else {
-            additionalProperties.put("packageVersion", packageVersion);
+            additionalProperties.put(CodegenConstants.PACKAGE_VERSION, packageVersion);
         }
 
-        if (additionalProperties.containsKey("packageName")) {
-            packageName = (String) additionalProperties.get("packageName");
+        if (additionalProperties.containsKey(CodegenConstants.PACKAGE_NAME)) {
+            setPackageName((String) additionalProperties.get(CodegenConstants.PACKAGE_NAME));
             apiPackage = packageName + ".Api";
             modelPackage = packageName + ".Model";
             clientPackage = packageName + ".Client";
         } else {
-            additionalProperties.put("packageName", packageName);
+            additionalProperties.put(CodegenConstants.PACKAGE_NAME, packageName);
         }
 
         additionalProperties.put("clientPackage", clientPackage);
-
+        
         supportingFiles.add(new SupportingFile("Configuration.mustache",
-                (sourceFolder + File.separator + clientPackage).replace(".", java.io.File.separator), "Configuration.cs"));
+                sourceFolder + File.separator + clientPackage.replace(".", java.io.File.separator), "Configuration.cs"));
         supportingFiles.add(new SupportingFile("ApiClient.mustache",
-                (sourceFolder + File.separator + clientPackage).replace(".", java.io.File.separator), "ApiClient.cs"));
+                sourceFolder + File.separator + clientPackage.replace(".", java.io.File.separator), "ApiClient.cs"));
         supportingFiles.add(new SupportingFile("ApiException.mustache",
-                (sourceFolder + File.separator + clientPackage).replace(".", java.io.File.separator), "ApiException.cs"));
+                sourceFolder + File.separator + clientPackage.replace(".", java.io.File.separator), "ApiException.cs"));
         supportingFiles.add(new SupportingFile("Newtonsoft.Json.dll", "bin", "Newtonsoft.Json.dll"));
         supportingFiles.add(new SupportingFile("RestSharp.dll", "bin", "RestSharp.dll"));
         supportingFiles.add(new SupportingFile("compile.mustache", "", "compile.bat"));
@@ -137,12 +139,11 @@ public class CSharpClientCodegen extends DefaultCodegen implements CodegenConfig
 
     @Override
     public String apiFileFolder() {
-
-        return outputFolder + File.separator + (sourceFolder + File.separator + apiPackage()).replace('.', File.separatorChar);
+        return outputFolder + File.separator + sourceFolder + File.separator + apiPackage().replace('.', File.separatorChar);
     }
 
     public String modelFileFolder() {
-        return outputFolder + File.separator + (sourceFolder + File.separator + modelPackage()).replace('.', File.separatorChar);
+        return outputFolder + File.separator + sourceFolder + File.separator + modelPackage().replace('.', File.separatorChar);
     }
 
     @Override
@@ -253,4 +254,11 @@ public class CSharpClientCodegen extends DefaultCodegen implements CodegenConfig
         return camelize(sanitizeName(operationId));
     }
 
+    public void setPackageName(String packageName) {
+        this.packageName = packageName;
+    }
+
+    public void setPackageVersion(String packageVersion) {
+        this.packageVersion = packageVersion;
+    }
 }

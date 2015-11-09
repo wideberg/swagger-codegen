@@ -39,7 +39,7 @@ export class Pet {
     status: Pet.StatusEnum;
 }
 
-export module Pet {
+export namespace Pet {
     export enum StatusEnum { 
         available = <any> 'available',
         pending = <any> 'pending',
@@ -63,7 +63,7 @@ export class Order {
     complete: boolean;
 }
 
-export module Order {
+export namespace Order {
     export enum StatusEnum { 
         placed = <any> 'placed',
         approved = <any> 'approved',
@@ -118,7 +118,11 @@ class VoidAuth implements Authentication {
 }
 
 export class UserApi {
-    private basePath = 'http://petstore.swagger.io/v2';
+    protected basePath = 'http://petstore.swagger.io/v2';
+    protected defaultHeaders : any = {};
+
+
+
     public authentications = {
         'default': <Authentication>new VoidAuth(),
         'api_key': new ApiKeyAuth('header', 'api_key'),
@@ -141,19 +145,27 @@ export class UserApi {
     set apiKey(key: string) {
         this.authentications.api_key.apiKey = key;
     }
+    private extendObj<T1,T2>(objA: T1, objB: T2) {
+        for(let key in objB){
+            if(objB.hasOwnProperty(key)){
+                objA[key] = objB[key];
+            }
+        }
+        return <T1&T2>objA;
+    }
 
-    public createUser (body?: User) : Promise<{ response: http.ClientResponse;  }> {
-        var path = this.url + this.basePath + '/user';
+    public createUser (body?: User) : Promise<{ response: http.ClientResponse; body?: any;  }> {
+        const path = this.url + this.basePath + '/user';
+        let queryParameters: any = {};
+        let headerParams: any = this.extendObj({}, this.defaultHeaders);
+        let formParams: any = {};
 
-        var queryParameters: any = {};
-        var headerParams: any = {};
-        var formParams: any = {};
 
-        var useFormData = false;
+        let useFormData = false;
 
-        var deferred = promise.defer<{ response: http.ClientResponse;  }>();
+        let deferred = promise.defer<{ response: http.ClientResponse; body?: any;  }>();
 
-        var requestOptions: request.Options = {
+        let requestOptions: request.Options = {
             method: 'POST',
             qs: queryParameters,
             headers: headerParams,
@@ -187,18 +199,18 @@ export class UserApi {
         return deferred.promise;
     }
 
-    public createUsersWithArrayInput (body?: Array<User>) : Promise<{ response: http.ClientResponse;  }> {
-        var path = this.url + this.basePath + '/user/createWithArray';
+    public createUsersWithArrayInput (body?: Array<User>) : Promise<{ response: http.ClientResponse; body?: any;  }> {
+        const path = this.url + this.basePath + '/user/createWithArray';
+        let queryParameters: any = {};
+        let headerParams: any = this.extendObj({}, this.defaultHeaders);
+        let formParams: any = {};
 
-        var queryParameters: any = {};
-        var headerParams: any = {};
-        var formParams: any = {};
 
-        var useFormData = false;
+        let useFormData = false;
 
-        var deferred = promise.defer<{ response: http.ClientResponse;  }>();
+        let deferred = promise.defer<{ response: http.ClientResponse; body?: any;  }>();
 
-        var requestOptions: request.Options = {
+        let requestOptions: request.Options = {
             method: 'POST',
             qs: queryParameters,
             headers: headerParams,
@@ -232,18 +244,18 @@ export class UserApi {
         return deferred.promise;
     }
 
-    public createUsersWithListInput (body?: Array<User>) : Promise<{ response: http.ClientResponse;  }> {
-        var path = this.url + this.basePath + '/user/createWithList';
+    public createUsersWithListInput (body?: Array<User>) : Promise<{ response: http.ClientResponse; body?: any;  }> {
+        const path = this.url + this.basePath + '/user/createWithList';
+        let queryParameters: any = {};
+        let headerParams: any = this.extendObj({}, this.defaultHeaders);
+        let formParams: any = {};
 
-        var queryParameters: any = {};
-        var headerParams: any = {};
-        var formParams: any = {};
 
-        var useFormData = false;
+        let useFormData = false;
 
-        var deferred = promise.defer<{ response: http.ClientResponse;  }>();
+        let deferred = promise.defer<{ response: http.ClientResponse; body?: any;  }>();
 
-        var requestOptions: request.Options = {
+        let requestOptions: request.Options = {
             method: 'POST',
             qs: queryParameters,
             headers: headerParams,
@@ -278,11 +290,11 @@ export class UserApi {
     }
 
     public loginUser (username?: string, password?: string) : Promise<{ response: http.ClientResponse; body: string;  }> {
-        var path = this.url + this.basePath + '/user/login';
+        const path = this.url + this.basePath + '/user/login';
+        let queryParameters: any = {};
+        let headerParams: any = this.extendObj({}, this.defaultHeaders);
+        let formParams: any = {};
 
-        var queryParameters: any = {};
-        var headerParams: any = {};
-        var formParams: any = {};
 
         if (username !== undefined) {
             queryParameters['username'] = username;
@@ -292,11 +304,11 @@ export class UserApi {
             queryParameters['password'] = password;
         }
 
-        var useFormData = false;
+        let useFormData = false;
 
-        var deferred = promise.defer<{ response: http.ClientResponse; body: string;  }>();
+        let deferred = promise.defer<{ response: http.ClientResponse; body: string;  }>();
 
-        var requestOptions: request.Options = {
+        let requestOptions: request.Options = {
             method: 'GET',
             qs: queryParameters,
             headers: headerParams,
@@ -329,18 +341,18 @@ export class UserApi {
         return deferred.promise;
     }
 
-    public logoutUser () : Promise<{ response: http.ClientResponse;  }> {
-        var path = this.url + this.basePath + '/user/logout';
+    public logoutUser () : Promise<{ response: http.ClientResponse; body?: any;  }> {
+        const path = this.url + this.basePath + '/user/logout';
+        let queryParameters: any = {};
+        let headerParams: any = this.extendObj({}, this.defaultHeaders);
+        let formParams: any = {};
 
-        var queryParameters: any = {};
-        var headerParams: any = {};
-        var formParams: any = {};
 
-        var useFormData = false;
+        let useFormData = false;
 
-        var deferred = promise.defer<{ response: http.ClientResponse;  }>();
+        let deferred = promise.defer<{ response: http.ClientResponse; body?: any;  }>();
 
-        var requestOptions: request.Options = {
+        let requestOptions: request.Options = {
             method: 'GET',
             qs: queryParameters,
             headers: headerParams,
@@ -374,24 +386,23 @@ export class UserApi {
     }
 
     public getUserByName (username: string) : Promise<{ response: http.ClientResponse; body: User;  }> {
-        var path = this.url + this.basePath + '/user/{username}';
+        const path = this.url + this.basePath + '/user/{username}'
+            .replace('{' + 'username' + '}', String(username));
+        let queryParameters: any = {};
+        let headerParams: any = this.extendObj({}, this.defaultHeaders);
+        let formParams: any = {};
 
-        path = path.replace('{' + 'username' + '}', String(username));
-
-        var queryParameters: any = {};
-        var headerParams: any = {};
-        var formParams: any = {};
 
         // verify required parameter 'username' is set
         if (!username) {
             throw new Error('Missing required parameter username when calling getUserByName');
         }
 
-        var useFormData = false;
+        let useFormData = false;
 
-        var deferred = promise.defer<{ response: http.ClientResponse; body: User;  }>();
+        let deferred = promise.defer<{ response: http.ClientResponse; body: User;  }>();
 
-        var requestOptions: request.Options = {
+        let requestOptions: request.Options = {
             method: 'GET',
             qs: queryParameters,
             headers: headerParams,
@@ -424,25 +435,24 @@ export class UserApi {
         return deferred.promise;
     }
 
-    public updateUser (username: string, body?: User) : Promise<{ response: http.ClientResponse;  }> {
-        var path = this.url + this.basePath + '/user/{username}';
+    public updateUser (username: string, body?: User) : Promise<{ response: http.ClientResponse; body?: any;  }> {
+        const path = this.url + this.basePath + '/user/{username}'
+            .replace('{' + 'username' + '}', String(username));
+        let queryParameters: any = {};
+        let headerParams: any = this.extendObj({}, this.defaultHeaders);
+        let formParams: any = {};
 
-        path = path.replace('{' + 'username' + '}', String(username));
-
-        var queryParameters: any = {};
-        var headerParams: any = {};
-        var formParams: any = {};
 
         // verify required parameter 'username' is set
         if (!username) {
             throw new Error('Missing required parameter username when calling updateUser');
         }
 
-        var useFormData = false;
+        let useFormData = false;
 
-        var deferred = promise.defer<{ response: http.ClientResponse;  }>();
+        let deferred = promise.defer<{ response: http.ClientResponse; body?: any;  }>();
 
-        var requestOptions: request.Options = {
+        let requestOptions: request.Options = {
             method: 'PUT',
             qs: queryParameters,
             headers: headerParams,
@@ -476,243 +486,24 @@ export class UserApi {
         return deferred.promise;
     }
 
-    public deleteUser (username: string) : Promise<{ response: http.ClientResponse;  }> {
-        var path = this.url + this.basePath + '/user/{username}';
+    public deleteUser (username: string) : Promise<{ response: http.ClientResponse; body?: any;  }> {
+        const path = this.url + this.basePath + '/user/{username}'
+            .replace('{' + 'username' + '}', String(username));
+        let queryParameters: any = {};
+        let headerParams: any = this.extendObj({}, this.defaultHeaders);
+        let formParams: any = {};
 
-        path = path.replace('{' + 'username' + '}', String(username));
-
-        var queryParameters: any = {};
-        var headerParams: any = {};
-        var formParams: any = {};
 
         // verify required parameter 'username' is set
         if (!username) {
             throw new Error('Missing required parameter username when calling deleteUser');
         }
 
-        var useFormData = false;
+        let useFormData = false;
 
-        var deferred = promise.defer<{ response: http.ClientResponse;  }>();
+        let deferred = promise.defer<{ response: http.ClientResponse; body?: any;  }>();
 
-        var requestOptions: request.Options = {
-            method: 'DELETE',
-            qs: queryParameters,
-            headers: headerParams,
-            uri: path,
-            json: true,
-        }
-
-        this.authentications.default.applyToRequest(requestOptions);
-
-        if (Object.keys(formParams).length) {
-            if (useFormData) {
-                (<any>requestOptions).formData = formParams;
-            } else {
-                requestOptions.form = formParams;
-            }
-        }
-
-        request(requestOptions, (error, response, body) => {
-            if (error) {
-                deferred.reject(error);
-            } else {
-                if (response.statusCode >= 200 && response.statusCode <= 299) {
-                    deferred.resolve({ response: response, body: body });
-                } else {
-                    deferred.reject({ response: response, body: body });
-                }
-            }
-        });
-
-        return deferred.promise;
-    }
-}
-export class StoreApi {
-    private basePath = 'http://petstore.swagger.io/v2';
-    public authentications = {
-        'default': <Authentication>new VoidAuth(),
-        'api_key': new ApiKeyAuth('header', 'api_key'),
-        'petstore_auth': new OAuth(),
-    }
-
-    constructor(url: string, basePath?: string);
-    constructor(private url: string, basePathOrUsername: string, password?: string, basePath?: string) {
-        if (password) {
-            if (basePath) {
-                this.basePath = basePath;
-            }
-        } else {
-            if (basePathOrUsername) {
-                this.basePath = basePathOrUsername
-            }
-        }
-    }
-
-    set apiKey(key: string) {
-        this.authentications.api_key.apiKey = key;
-    }
-
-    public getInventory () : Promise<{ response: http.ClientResponse; body: { [key: string]: number; };  }> {
-        var path = this.url + this.basePath + '/store/inventory';
-
-        var queryParameters: any = {};
-        var headerParams: any = {};
-        var formParams: any = {};
-
-        var useFormData = false;
-
-        var deferred = promise.defer<{ response: http.ClientResponse; body: { [key: string]: number; };  }>();
-
-        var requestOptions: request.Options = {
-            method: 'GET',
-            qs: queryParameters,
-            headers: headerParams,
-            uri: path,
-            json: true,
-        }
-
-        this.authentications.api_key.applyToRequest(requestOptions);
-
-        this.authentications.default.applyToRequest(requestOptions);
-
-        if (Object.keys(formParams).length) {
-            if (useFormData) {
-                (<any>requestOptions).formData = formParams;
-            } else {
-                requestOptions.form = formParams;
-            }
-        }
-
-        request(requestOptions, (error, response, body) => {
-            if (error) {
-                deferred.reject(error);
-            } else {
-                if (response.statusCode >= 200 && response.statusCode <= 299) {
-                    deferred.resolve({ response: response, body: body });
-                } else {
-                    deferred.reject({ response: response, body: body });
-                }
-            }
-        });
-
-        return deferred.promise;
-    }
-
-    public placeOrder (body?: Order) : Promise<{ response: http.ClientResponse; body: Order;  }> {
-        var path = this.url + this.basePath + '/store/order';
-
-        var queryParameters: any = {};
-        var headerParams: any = {};
-        var formParams: any = {};
-
-        var useFormData = false;
-
-        var deferred = promise.defer<{ response: http.ClientResponse; body: Order;  }>();
-
-        var requestOptions: request.Options = {
-            method: 'POST',
-            qs: queryParameters,
-            headers: headerParams,
-            uri: path,
-            json: true,
-            body: body,
-        }
-
-        this.authentications.default.applyToRequest(requestOptions);
-
-        if (Object.keys(formParams).length) {
-            if (useFormData) {
-                (<any>requestOptions).formData = formParams;
-            } else {
-                requestOptions.form = formParams;
-            }
-        }
-
-        request(requestOptions, (error, response, body) => {
-            if (error) {
-                deferred.reject(error);
-            } else {
-                if (response.statusCode >= 200 && response.statusCode <= 299) {
-                    deferred.resolve({ response: response, body: body });
-                } else {
-                    deferred.reject({ response: response, body: body });
-                }
-            }
-        });
-
-        return deferred.promise;
-    }
-
-    public getOrderById (orderId: string) : Promise<{ response: http.ClientResponse; body: Order;  }> {
-        var path = this.url + this.basePath + '/store/order/{orderId}';
-
-        path = path.replace('{' + 'orderId' + '}', String(orderId));
-
-        var queryParameters: any = {};
-        var headerParams: any = {};
-        var formParams: any = {};
-
-        // verify required parameter 'orderId' is set
-        if (!orderId) {
-            throw new Error('Missing required parameter orderId when calling getOrderById');
-        }
-
-        var useFormData = false;
-
-        var deferred = promise.defer<{ response: http.ClientResponse; body: Order;  }>();
-
-        var requestOptions: request.Options = {
-            method: 'GET',
-            qs: queryParameters,
-            headers: headerParams,
-            uri: path,
-            json: true,
-        }
-
-        this.authentications.default.applyToRequest(requestOptions);
-
-        if (Object.keys(formParams).length) {
-            if (useFormData) {
-                (<any>requestOptions).formData = formParams;
-            } else {
-                requestOptions.form = formParams;
-            }
-        }
-
-        request(requestOptions, (error, response, body) => {
-            if (error) {
-                deferred.reject(error);
-            } else {
-                if (response.statusCode >= 200 && response.statusCode <= 299) {
-                    deferred.resolve({ response: response, body: body });
-                } else {
-                    deferred.reject({ response: response, body: body });
-                }
-            }
-        });
-
-        return deferred.promise;
-    }
-
-    public deleteOrder (orderId: string) : Promise<{ response: http.ClientResponse;  }> {
-        var path = this.url + this.basePath + '/store/order/{orderId}';
-
-        path = path.replace('{' + 'orderId' + '}', String(orderId));
-
-        var queryParameters: any = {};
-        var headerParams: any = {};
-        var formParams: any = {};
-
-        // verify required parameter 'orderId' is set
-        if (!orderId) {
-            throw new Error('Missing required parameter orderId when calling deleteOrder');
-        }
-
-        var useFormData = false;
-
-        var deferred = promise.defer<{ response: http.ClientResponse;  }>();
-
-        var requestOptions: request.Options = {
+        let requestOptions: request.Options = {
             method: 'DELETE',
             qs: queryParameters,
             headers: headerParams,
@@ -746,7 +537,11 @@ export class StoreApi {
     }
 }
 export class PetApi {
-    private basePath = 'http://petstore.swagger.io/v2';
+    protected basePath = 'http://petstore.swagger.io/v2';
+    protected defaultHeaders : any = {};
+
+
+
     public authentications = {
         'default': <Authentication>new VoidAuth(),
         'api_key': new ApiKeyAuth('header', 'api_key'),
@@ -769,19 +564,27 @@ export class PetApi {
     set apiKey(key: string) {
         this.authentications.api_key.apiKey = key;
     }
+    private extendObj<T1,T2>(objA: T1, objB: T2) {
+        for(let key in objB){
+            if(objB.hasOwnProperty(key)){
+                objA[key] = objB[key];
+            }
+        }
+        return <T1&T2>objA;
+    }
 
-    public updatePet (body?: Pet) : Promise<{ response: http.ClientResponse;  }> {
-        var path = this.url + this.basePath + '/pet';
+    public updatePet (body?: Pet) : Promise<{ response: http.ClientResponse; body?: any;  }> {
+        const path = this.url + this.basePath + '/pet';
+        let queryParameters: any = {};
+        let headerParams: any = this.extendObj({}, this.defaultHeaders);
+        let formParams: any = {};
 
-        var queryParameters: any = {};
-        var headerParams: any = {};
-        var formParams: any = {};
 
-        var useFormData = false;
+        let useFormData = false;
 
-        var deferred = promise.defer<{ response: http.ClientResponse;  }>();
+        let deferred = promise.defer<{ response: http.ClientResponse; body?: any;  }>();
 
-        var requestOptions: request.Options = {
+        let requestOptions: request.Options = {
             method: 'PUT',
             qs: queryParameters,
             headers: headerParams,
@@ -817,18 +620,18 @@ export class PetApi {
         return deferred.promise;
     }
 
-    public addPet (body?: Pet) : Promise<{ response: http.ClientResponse;  }> {
-        var path = this.url + this.basePath + '/pet';
+    public addPet (body?: Pet) : Promise<{ response: http.ClientResponse; body?: any;  }> {
+        const path = this.url + this.basePath + '/pet';
+        let queryParameters: any = {};
+        let headerParams: any = this.extendObj({}, this.defaultHeaders);
+        let formParams: any = {};
 
-        var queryParameters: any = {};
-        var headerParams: any = {};
-        var formParams: any = {};
 
-        var useFormData = false;
+        let useFormData = false;
 
-        var deferred = promise.defer<{ response: http.ClientResponse;  }>();
+        let deferred = promise.defer<{ response: http.ClientResponse; body?: any;  }>();
 
-        var requestOptions: request.Options = {
+        let requestOptions: request.Options = {
             method: 'POST',
             qs: queryParameters,
             headers: headerParams,
@@ -865,21 +668,21 @@ export class PetApi {
     }
 
     public findPetsByStatus (status?: Array<string>) : Promise<{ response: http.ClientResponse; body: Array<Pet>;  }> {
-        var path = this.url + this.basePath + '/pet/findByStatus';
+        const path = this.url + this.basePath + '/pet/findByStatus';
+        let queryParameters: any = {};
+        let headerParams: any = this.extendObj({}, this.defaultHeaders);
+        let formParams: any = {};
 
-        var queryParameters: any = {};
-        var headerParams: any = {};
-        var formParams: any = {};
 
         if (status !== undefined) {
             queryParameters['status'] = status;
         }
 
-        var useFormData = false;
+        let useFormData = false;
 
-        var deferred = promise.defer<{ response: http.ClientResponse; body: Array<Pet>;  }>();
+        let deferred = promise.defer<{ response: http.ClientResponse; body: Array<Pet>;  }>();
 
-        var requestOptions: request.Options = {
+        let requestOptions: request.Options = {
             method: 'GET',
             qs: queryParameters,
             headers: headerParams,
@@ -915,21 +718,21 @@ export class PetApi {
     }
 
     public findPetsByTags (tags?: Array<string>) : Promise<{ response: http.ClientResponse; body: Array<Pet>;  }> {
-        var path = this.url + this.basePath + '/pet/findByTags';
+        const path = this.url + this.basePath + '/pet/findByTags';
+        let queryParameters: any = {};
+        let headerParams: any = this.extendObj({}, this.defaultHeaders);
+        let formParams: any = {};
 
-        var queryParameters: any = {};
-        var headerParams: any = {};
-        var formParams: any = {};
 
         if (tags !== undefined) {
             queryParameters['tags'] = tags;
         }
 
-        var useFormData = false;
+        let useFormData = false;
 
-        var deferred = promise.defer<{ response: http.ClientResponse; body: Array<Pet>;  }>();
+        let deferred = promise.defer<{ response: http.ClientResponse; body: Array<Pet>;  }>();
 
-        var requestOptions: request.Options = {
+        let requestOptions: request.Options = {
             method: 'GET',
             qs: queryParameters,
             headers: headerParams,
@@ -965,32 +768,29 @@ export class PetApi {
     }
 
     public getPetById (petId: number) : Promise<{ response: http.ClientResponse; body: Pet;  }> {
-        var path = this.url + this.basePath + '/pet/{petId}';
+        const path = this.url + this.basePath + '/pet/{petId}'
+            .replace('{' + 'petId' + '}', String(petId));
+        let queryParameters: any = {};
+        let headerParams: any = this.extendObj({}, this.defaultHeaders);
+        let formParams: any = {};
 
-        path = path.replace('{' + 'petId' + '}', String(petId));
-
-        var queryParameters: any = {};
-        var headerParams: any = {};
-        var formParams: any = {};
 
         // verify required parameter 'petId' is set
         if (!petId) {
             throw new Error('Missing required parameter petId when calling getPetById');
         }
 
-        var useFormData = false;
+        let useFormData = false;
 
-        var deferred = promise.defer<{ response: http.ClientResponse; body: Pet;  }>();
+        let deferred = promise.defer<{ response: http.ClientResponse; body: Pet;  }>();
 
-        var requestOptions: request.Options = {
+        let requestOptions: request.Options = {
             method: 'GET',
             qs: queryParameters,
             headers: headerParams,
             uri: path,
             json: true,
         }
-
-        this.authentications.petstore_auth.applyToRequest(requestOptions);
 
         this.authentications.api_key.applyToRequest(requestOptions);
 
@@ -1019,21 +819,20 @@ export class PetApi {
         return deferred.promise;
     }
 
-    public updatePetWithForm (petId: string, name?: string, status?: string) : Promise<{ response: http.ClientResponse;  }> {
-        var path = this.url + this.basePath + '/pet/{petId}';
+    public updatePetWithForm (petId: string, name?: string, status?: string) : Promise<{ response: http.ClientResponse; body?: any;  }> {
+        const path = this.url + this.basePath + '/pet/{petId}'
+            .replace('{' + 'petId' + '}', String(petId));
+        let queryParameters: any = {};
+        let headerParams: any = this.extendObj({}, this.defaultHeaders);
+        let formParams: any = {};
 
-        path = path.replace('{' + 'petId' + '}', String(petId));
-
-        var queryParameters: any = {};
-        var headerParams: any = {};
-        var formParams: any = {};
 
         // verify required parameter 'petId' is set
         if (!petId) {
             throw new Error('Missing required parameter petId when calling updatePetWithForm');
         }
 
-        var useFormData = false;
+        let useFormData = false;
 
         if (name !== undefined) {
             formParams['name'] = name;
@@ -1043,9 +842,9 @@ export class PetApi {
             formParams['status'] = status;
         }
 
-        var deferred = promise.defer<{ response: http.ClientResponse;  }>();
+        let deferred = promise.defer<{ response: http.ClientResponse; body?: any;  }>();
 
-        var requestOptions: request.Options = {
+        let requestOptions: request.Options = {
             method: 'POST',
             qs: queryParameters,
             headers: headerParams,
@@ -1080,27 +879,26 @@ export class PetApi {
         return deferred.promise;
     }
 
-    public deletePet (petId: number, apiKey?: string) : Promise<{ response: http.ClientResponse;  }> {
-        var path = this.url + this.basePath + '/pet/{petId}';
+    public deletePet (petId: number, apiKey?: string) : Promise<{ response: http.ClientResponse; body?: any;  }> {
+        const path = this.url + this.basePath + '/pet/{petId}'
+            .replace('{' + 'petId' + '}', String(petId));
+        let queryParameters: any = {};
+        let headerParams: any = this.extendObj({}, this.defaultHeaders);
+        let formParams: any = {};
 
-        path = path.replace('{' + 'petId' + '}', String(petId));
-
-        var queryParameters: any = {};
-        var headerParams: any = {};
-        var formParams: any = {};
 
         // verify required parameter 'petId' is set
         if (!petId) {
             throw new Error('Missing required parameter petId when calling deletePet');
         }
 
-        headerParams['apiKey'] = apiKey;
+        headerParams['api_key'] = apiKey;
 
-        var useFormData = false;
+        let useFormData = false;
 
-        var deferred = promise.defer<{ response: http.ClientResponse;  }>();
+        let deferred = promise.defer<{ response: http.ClientResponse; body?: any;  }>();
 
-        var requestOptions: request.Options = {
+        let requestOptions: request.Options = {
             method: 'DELETE',
             qs: queryParameters,
             headers: headerParams,
@@ -1135,21 +933,20 @@ export class PetApi {
         return deferred.promise;
     }
 
-    public uploadFile (petId: number, additionalMetadata?: string, file?: any) : Promise<{ response: http.ClientResponse;  }> {
-        var path = this.url + this.basePath + '/pet/{petId}/uploadImage';
+    public uploadFile (petId: number, additionalMetadata?: string, file?: any) : Promise<{ response: http.ClientResponse; body?: any;  }> {
+        const path = this.url + this.basePath + '/pet/{petId}/uploadImage'
+            .replace('{' + 'petId' + '}', String(petId));
+        let queryParameters: any = {};
+        let headerParams: any = this.extendObj({}, this.defaultHeaders);
+        let formParams: any = {};
 
-        path = path.replace('{' + 'petId' + '}', String(petId));
-
-        var queryParameters: any = {};
-        var headerParams: any = {};
-        var formParams: any = {};
 
         // verify required parameter 'petId' is set
         if (!petId) {
             throw new Error('Missing required parameter petId when calling uploadFile');
         }
 
-        var useFormData = false;
+        let useFormData = false;
 
         if (additionalMetadata !== undefined) {
             formParams['additionalMetadata'] = additionalMetadata;
@@ -1160,9 +957,9 @@ export class PetApi {
         }
         useFormData = true;
 
-        var deferred = promise.defer<{ response: http.ClientResponse;  }>();
+        let deferred = promise.defer<{ response: http.ClientResponse; body?: any;  }>();
 
-        var requestOptions: request.Options = {
+        let requestOptions: request.Options = {
             method: 'POST',
             qs: queryParameters,
             headers: headerParams,
@@ -1171,6 +968,234 @@ export class PetApi {
         }
 
         this.authentications.petstore_auth.applyToRequest(requestOptions);
+
+        this.authentications.default.applyToRequest(requestOptions);
+
+        if (Object.keys(formParams).length) {
+            if (useFormData) {
+                (<any>requestOptions).formData = formParams;
+            } else {
+                requestOptions.form = formParams;
+            }
+        }
+
+        request(requestOptions, (error, response, body) => {
+            if (error) {
+                deferred.reject(error);
+            } else {
+                if (response.statusCode >= 200 && response.statusCode <= 299) {
+                    deferred.resolve({ response: response, body: body });
+                } else {
+                    deferred.reject({ response: response, body: body });
+                }
+            }
+        });
+
+        return deferred.promise;
+    }
+}
+export class StoreApi {
+    protected basePath = 'http://petstore.swagger.io/v2';
+    protected defaultHeaders : any = {};
+
+
+
+    public authentications = {
+        'default': <Authentication>new VoidAuth(),
+        'api_key': new ApiKeyAuth('header', 'api_key'),
+        'petstore_auth': new OAuth(),
+    }
+
+    constructor(url: string, basePath?: string);
+    constructor(private url: string, basePathOrUsername: string, password?: string, basePath?: string) {
+        if (password) {
+            if (basePath) {
+                this.basePath = basePath;
+            }
+        } else {
+            if (basePathOrUsername) {
+                this.basePath = basePathOrUsername
+            }
+        }
+    }
+
+    set apiKey(key: string) {
+        this.authentications.api_key.apiKey = key;
+    }
+    private extendObj<T1,T2>(objA: T1, objB: T2) {
+        for(let key in objB){
+            if(objB.hasOwnProperty(key)){
+                objA[key] = objB[key];
+            }
+        }
+        return <T1&T2>objA;
+    }
+
+    public getInventory () : Promise<{ response: http.ClientResponse; body: { [key: string]: number; };  }> {
+        const path = this.url + this.basePath + '/store/inventory';
+        let queryParameters: any = {};
+        let headerParams: any = this.extendObj({}, this.defaultHeaders);
+        let formParams: any = {};
+
+
+        let useFormData = false;
+
+        let deferred = promise.defer<{ response: http.ClientResponse; body: { [key: string]: number; };  }>();
+
+        let requestOptions: request.Options = {
+            method: 'GET',
+            qs: queryParameters,
+            headers: headerParams,
+            uri: path,
+            json: true,
+        }
+
+        this.authentications.api_key.applyToRequest(requestOptions);
+
+        this.authentications.default.applyToRequest(requestOptions);
+
+        if (Object.keys(formParams).length) {
+            if (useFormData) {
+                (<any>requestOptions).formData = formParams;
+            } else {
+                requestOptions.form = formParams;
+            }
+        }
+
+        request(requestOptions, (error, response, body) => {
+            if (error) {
+                deferred.reject(error);
+            } else {
+                if (response.statusCode >= 200 && response.statusCode <= 299) {
+                    deferred.resolve({ response: response, body: body });
+                } else {
+                    deferred.reject({ response: response, body: body });
+                }
+            }
+        });
+
+        return deferred.promise;
+    }
+
+    public placeOrder (body?: Order) : Promise<{ response: http.ClientResponse; body: Order;  }> {
+        const path = this.url + this.basePath + '/store/order';
+        let queryParameters: any = {};
+        let headerParams: any = this.extendObj({}, this.defaultHeaders);
+        let formParams: any = {};
+
+
+        let useFormData = false;
+
+        let deferred = promise.defer<{ response: http.ClientResponse; body: Order;  }>();
+
+        let requestOptions: request.Options = {
+            method: 'POST',
+            qs: queryParameters,
+            headers: headerParams,
+            uri: path,
+            json: true,
+            body: body,
+        }
+
+        this.authentications.default.applyToRequest(requestOptions);
+
+        if (Object.keys(formParams).length) {
+            if (useFormData) {
+                (<any>requestOptions).formData = formParams;
+            } else {
+                requestOptions.form = formParams;
+            }
+        }
+
+        request(requestOptions, (error, response, body) => {
+            if (error) {
+                deferred.reject(error);
+            } else {
+                if (response.statusCode >= 200 && response.statusCode <= 299) {
+                    deferred.resolve({ response: response, body: body });
+                } else {
+                    deferred.reject({ response: response, body: body });
+                }
+            }
+        });
+
+        return deferred.promise;
+    }
+
+    public getOrderById (orderId: string) : Promise<{ response: http.ClientResponse; body: Order;  }> {
+        const path = this.url + this.basePath + '/store/order/{orderId}'
+            .replace('{' + 'orderId' + '}', String(orderId));
+        let queryParameters: any = {};
+        let headerParams: any = this.extendObj({}, this.defaultHeaders);
+        let formParams: any = {};
+
+
+        // verify required parameter 'orderId' is set
+        if (!orderId) {
+            throw new Error('Missing required parameter orderId when calling getOrderById');
+        }
+
+        let useFormData = false;
+
+        let deferred = promise.defer<{ response: http.ClientResponse; body: Order;  }>();
+
+        let requestOptions: request.Options = {
+            method: 'GET',
+            qs: queryParameters,
+            headers: headerParams,
+            uri: path,
+            json: true,
+        }
+
+        this.authentications.default.applyToRequest(requestOptions);
+
+        if (Object.keys(formParams).length) {
+            if (useFormData) {
+                (<any>requestOptions).formData = formParams;
+            } else {
+                requestOptions.form = formParams;
+            }
+        }
+
+        request(requestOptions, (error, response, body) => {
+            if (error) {
+                deferred.reject(error);
+            } else {
+                if (response.statusCode >= 200 && response.statusCode <= 299) {
+                    deferred.resolve({ response: response, body: body });
+                } else {
+                    deferred.reject({ response: response, body: body });
+                }
+            }
+        });
+
+        return deferred.promise;
+    }
+
+    public deleteOrder (orderId: string) : Promise<{ response: http.ClientResponse; body?: any;  }> {
+        const path = this.url + this.basePath + '/store/order/{orderId}'
+            .replace('{' + 'orderId' + '}', String(orderId));
+        let queryParameters: any = {};
+        let headerParams: any = this.extendObj({}, this.defaultHeaders);
+        let formParams: any = {};
+
+
+        // verify required parameter 'orderId' is set
+        if (!orderId) {
+            throw new Error('Missing required parameter orderId when calling deleteOrder');
+        }
+
+        let useFormData = false;
+
+        let deferred = promise.defer<{ response: http.ClientResponse; body?: any;  }>();
+
+        let requestOptions: request.Options = {
+            method: 'DELETE',
+            qs: queryParameters,
+            headers: headerParams,
+            uri: path,
+            json: true,
+        }
 
         this.authentications.default.applyToRequest(requestOptions);
 
