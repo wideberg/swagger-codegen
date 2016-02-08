@@ -45,7 +45,7 @@ public class ApiClient {
   private Map<String, String> defaultHeaderMap = new HashMap<String, String>();
   private boolean debugging = false;
   private String basePath = "{{basePath}}";
-  private JSON json = new JSON();
+  private JSON json;
 
   private Map<String, Authentication> authentications;
 
@@ -54,7 +54,7 @@ public class ApiClient {
 
   private DateFormat dateFormat;
 
-  public ApiClient() {
+  public ApiClient(DateFormat dateFormat) {
     // Use ISO 8601 format for date and datetime.
     // See https://en.wikipedia.org/wiki/ISO_8601
     this.dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
@@ -72,6 +72,7 @@ public class ApiClient {
     authentications.put("{{name}}", new OAuth());{{/isOAuth}}{{/authMethods}}
     // Prevent the authentications from being modified.
     authentications = Collections.unmodifiableMap(authentications);
+    json = new JSON(dateFormat);
   }
 
   public String getBasePath() {
