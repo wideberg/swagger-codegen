@@ -386,7 +386,10 @@ public class JavaClientCodegen extends DefaultCodegen implements CodegenConfig {
                             enumName = value;
                         }
                     }
-                    enumVar.put("name", toEnumVarName(enumName));
+                    String enumValue = toEnumVarName(enumName);
+                    enumVar.put("name", enumValue);
+                    //Precision surgery to change to the expected value. Very specific right now: 1X2-> X1X2 -> 1X2
+                    value = value.equals("X1X2") ? "1X2" : value;
                     enumVar.put("value", value);
                     enumVars.add(enumVar);
                 }

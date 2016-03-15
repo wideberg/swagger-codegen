@@ -643,7 +643,7 @@ public class ApiClient {
   /**
    * Get an existing client or create a new client to handle HTTP request.
    */
-  private Client getClient() {
+  public Client getClient() {
     if(!hostMap.containsKey(basePath)) {
       Client client = Client.create();
       if (debugging)
